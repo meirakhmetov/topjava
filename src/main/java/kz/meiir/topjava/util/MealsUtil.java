@@ -3,15 +3,13 @@ package kz.meiir.topjava.util;
 import kz.meiir.topjava.model.Meal;
 import kz.meiir.topjava.model.MealTo;
 
-import java.sql.Time;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
+import java.util.*;
+
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +29,25 @@ public class MealsUtil {
         List<MealTo> mealsWithExcess = getFilteredWithExcess(meals, LocalTime.of(7,0), LocalTime.of(12,0),2000);
         mealsWithExcess.forEach(System.out::println);
 
+        System.out.println(getFilteredWithExcessByCycle(meals, LocalTime.of(7,0),LocalTime.of(12,0),2000));
+
+    }
+
+    public static List<MealTo> getFilteredWithExcessByCycle(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        final Map<LocalDate, Integer> caloriesSumByDate = new HashMap<>();
+        meals.forEach(meal -> caloriesSumByDate.merge(meal.getDate(), meal.getCalories(), Integer::sum));
+
+        final List<MealTo> mealWithExcess = new ArrayList<>();
+        meals.forEach(meal ->{
+                if(TimeUtil.isBetweenInclusive(meal.getTime(), startTime,endTime)) {
+                    mealWithExcess.add(creatWithExcess(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay));
+                }
+        });
+        return mealWithExcess;
+    }
+
+    private static MealTo creatWithExcess(Meal meal, boolean excess){
+        return new MealTo(meal.getDateTime(),meal.getDescription(), meal.getCalories(),excess);
     }
 
     public static List<MealTo> getFilteredWithExcess(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
