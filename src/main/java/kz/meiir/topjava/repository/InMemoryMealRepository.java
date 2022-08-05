@@ -48,7 +48,7 @@ public class InMemoryMealRepository implements MealRepository {
         List<Map.Entry<Integer, Meal>> capitalList = new LinkedList<>(repository.entrySet());
 
         // call the sort() method of Collections
-        Collections.sort(capitalList, (l1, l2) -> l1.getValue().getDate().compareTo(l2.getValue().getDate()));
+        Collections.sort(capitalList, (l1, l2) -> l1.getValue().getDateTime().compareTo(l2.getValue().getDateTime()));
 
         // create a new map
         LinkedHashMap result = new LinkedHashMap();

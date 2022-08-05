@@ -46,7 +46,7 @@ public class MealServlet extends HttpServlet {
 
         LOG.info(meal.isNew() ? "Creat {}" : "Update{}", meal);
         repository.save(meal);
-        response.sendRedirect("meals.jsp");
+        response.sendRedirect("meals?action=sortByDate");
     }
 
 
@@ -62,25 +62,22 @@ public class MealServlet extends HttpServlet {
             LOG.info("DELETE {}",id);
             repository.delete(id);
             response.sendRedirect("meals");
-        }else if(action.equals("create")){
-            LOG.info("Create new Meal");
-            final Meal meal = new Meal(LocalDateTime.now(),"",1000);
-            request.setAttribute("meal",meal);
-            request.getRequestDispatcher("/mealForm.jsp").forward(request,response);
-
-        }else if(action.equals("update")){
-            int id = getId(request);
-            LOG.info("Update Meal {}",id);
-            final Meal meal = repository.get(id);
-            request.setAttribute("meal",meal);
-            request.getRequestDispatcher("/mealForm.jsp").forward(request,response);
-
 
         }else if(action.equals("sortByDate")){
             LOG.info("getAllSortByDate");
             request.setAttribute("meals",MealsUtil.getTos(repository.sortByDate(),MealsUtil.DEFAULT_CALORIES_PER_DAY));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
+        }else if(action.equals("create")){
+            final Meal meal = new Meal(LocalDateTime.now(),"",1000);
+            request.setAttribute("meal",meal);
+            request.getRequestDispatcher("/mealForm.jsp").forward(request,response);
+
+        }else if(action.equals("update")) {
+            int id = getId(request);
+            final Meal meal = repository.get(id);
+            request.setAttribute("meal", meal);
+            request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
         }
 
     }
