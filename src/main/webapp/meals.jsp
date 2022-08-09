@@ -21,8 +21,7 @@
     <h2>Meals LIST</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
-    <a href="meals?action=sortByDate">Sort By Date</a>
-    <br><br>
+
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
