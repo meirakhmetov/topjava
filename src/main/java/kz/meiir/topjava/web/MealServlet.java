@@ -1,7 +1,7 @@
 package kz.meiir.topjava.web;
 
 import kz.meiir.topjava.model.Meal;
-import kz.meiir.topjava.repository.InMemoryMealRepository;
+import kz.meiir.topjava.repository.inmemory.InMemoryMealRepository;
 import kz.meiir.topjava.repository.MealRepository;
 import kz.meiir.topjava.util.MealsUtil;
 import org.slf4j.LoggerFactory;
@@ -16,10 +16,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author Meiir Akhmetov on 04.08.2022
@@ -40,13 +37,14 @@ public class MealServlet extends HttpServlet {
         String id=request.getParameter("id");
 
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-        LocalDateTime.parse(request.getParameter("dateTime")),
-        request.getParameter("description"),
-        Integer.parseInt(request.getParameter("calories")));
+            LocalDateTime.parse(request.getParameter("dateTime")),
+            request.getParameter("description"),
+            Integer.parseInt(request.getParameter("calories")));
 
         LOG.info(meal.isNew() ? "Creat {}" : "Update{}", meal);
         repository.save(meal);
-        response.sendRedirect("meals?action=sortByDate");
+        response.sendRedirect("meals");
+        //response.sendRedirect("meals?action=sortByDate");
     }
 
 
@@ -63,10 +61,10 @@ public class MealServlet extends HttpServlet {
             repository.delete(id);
             response.sendRedirect("meals");
 
-        }else if(action.equals("sortByDate")){
+   /*     }else if(action.equals("sortByDate")){
             LOG.info("getAllSortByDate");
             request.setAttribute("meals",MealsUtil.getTos(repository.sortByDate(),MealsUtil.DEFAULT_CALORIES_PER_DAY));
-            request.getRequestDispatcher("/meals.jsp").forward(request, response);
+            request.getRequestDispatcher("/meals.jsp").forward(request, response);*/
 
         }else if(action.equals("create")){
             final Meal meal = new Meal(LocalDateTime.now(),"",1000);

@@ -1,7 +1,8 @@
-package kz.meiir.topjava.repository;
+package kz.meiir.topjava.repository.inmemory;
 
-import javafx.print.Collation;
+
 import kz.meiir.topjava.model.Meal;
+import kz.meiir.topjava.repository.MealRepository;
 import kz.meiir.topjava.util.MealsUtil;
 
 import java.util.*;
@@ -43,7 +44,7 @@ public class InMemoryMealRepository implements MealRepository {
         return repository.values();
     }
 
-    @Override
+   /* @Override
     public Collection<Meal> sortByDate(){
         List<Map.Entry<Integer, Meal>> capitalList = new LinkedList<>(repository.entrySet());
 
@@ -59,5 +60,5 @@ public class InMemoryMealRepository implements MealRepository {
         }
 
         return result.values();
-    }
+    } */
 }
