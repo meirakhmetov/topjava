@@ -1,64 +1,73 @@
 package kz.meiir.topjava.repository.inmemory;
 
-
+import org.springframework.stereotype.Repository;
 import kz.meiir.topjava.model.Meal;
 import kz.meiir.topjava.repository.MealRepository;
 import kz.meiir.topjava.util.MealsUtil;
+import kz.meiir.topjava.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static kz.meiir.topjava.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
+import static kz.meiir.topjava.repository.inmemory.InMemoryUserRepository.USER_ID;
 
 /**
  * @author Meiir Akhmetov on 04.08.2022
  */
+@Repository
 public class InMemoryMealRepository implements MealRepository {
-    private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
-    private AtomicInteger counter = new AtomicInteger(0);
+
+    // Map userId -> mealRepository
+    private Map<Integer, InMemoryBaseRepository<Meal>> useraMealsMap = new ConcurrentHashMap<>();
     {
-        MealsUtil.MEALS.forEach(this::save);
+        MealsUtil.MEALS.forEach(meal-> save(meal,USER_ID));
+
     }
     @Override
-    public Meal save(Meal meal) {
-        if(meal.isNew()){
-            meal.setId(counter.incrementAndGet());
-            repository.put(meal.getId(), meal);
-            return meal;
-        }
-        //trea case: update, but not present in storage
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+    public Meal save(Meal meal, int userId) {
+        InMemoryBaseRepository<Meal> meals = useraMealsMap.computeIfAbsent(userId, uid -> new InMemoryBaseRepository<>());
+        return meals.save(meal);
     }
 
     @Override
-    public boolean delete(int id) {
-        return repository.remove(id) != null;
+    public boolean delete(int id, int userId) {
+       InMemoryBaseRepository<Meal> meals = useraMealsMap.get(userId);
+       return meals!=null && meals.delete(id);
     }
 
     @Override
-    public Meal get(int id) {
-        return repository.get(id);
+    public Meal get(int id,int userId) {
+        InMemoryBaseRepository<Meal> meals = useraMealsMap.get(userId);
+        return meals == null ? null : meals.get(id);
     }
 
     @Override
-    public Collection<Meal> getAll() {
-        return repository.values();
+    public Collection<Meal> getAll(int userId) {
+        return getAllFilteres(userId, m->true);
     }
 
-   /* @Override
-    public Collection<Meal> sortByDate(){
-        List<Map.Entry<Integer, Meal>> capitalList = new LinkedList<>(repository.entrySet());
+    @Override
+    public List<Meal> getBetween(LocalDateTime startTime, LocalDateTime endTime, int userId) {
+        return getAllFilteres(userId, m-> Util.isBetweenInclusive(m.getDateTime(),startTime,endTime));
 
-        // call the sort() method of Collections
-        Collections.sort(capitalList, (l1, l2) -> l1.getValue().getDateTime().compareTo(l2.getValue().getDateTime()));
+    }
 
-        // create a new map
-        LinkedHashMap result = new LinkedHashMap();
+    private List<Meal> getAllFilteres(int userId, Predicate<Meal> filter){
+        InMemoryBaseRepository<Meal> meals = useraMealsMap.get(userId);
+        return meals == null ? Collections.emptyList():
+                meals.getCollection().stream()
+                        .filter(filter)
+                        .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                        .collect(Collectors.toList());
+    }
 
-        // get entry from list to the map
-        for (Map.Entry<Integer, Meal> entry : capitalList) {
-            result.put(entry.getKey(), entry.getValue());
-        }
 
-        return result.values();
-    } */
 }

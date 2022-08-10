@@ -1,8 +1,8 @@
 package kz.meiir.topjava.util;
 
-
 import kz.meiir.topjava.model.Meal;
-import kz.meiir.topjava.model.MealTo;
+import kz.meiir.topjava.to.MealTo;
+import org.springframework.lang.Nullable;
 
 
 import java.time.LocalDate;
@@ -11,9 +11,6 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-
 import java.util.stream.Collectors;
 
 /**
@@ -34,19 +31,21 @@ public class MealsUtil {
 
 
     public static List<MealTo> getTos(Collection<Meal> meals, int caloriesPerDay) {
-        return getFiltered(meals,LocalTime.of(0,0), LocalTime.of(23,59),2000);
+        return getFiltered(meals,caloriesPerDay,meal -> true);
     }
 
-   /* public static List<MealTo> getFilteredTos(Collection<Meal> meals, int caloriesPerDay, LocalTime startTime, LocalTime endTime){
-        return getFiltered(meals, caloriesPerDay, (meal -> DateTimeUtil.isBetween(, startTime, endTime)));
-    }*/
-    public static List<MealTo> getFiltered(Collection<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<MealTo> getFilteredTos(Collection<Meal> meals, int caloriesPerDay,
+                                              @Nullable LocalTime startTime, LocalTime endTime){
+        return getFiltered(meals, caloriesPerDay,(um -> Util.isBetweenInclusive(um.getTime(), startTime, endTime)));
+    }
+
+    public static List<MealTo> getFiltered(Collection<Meal> meals, int caloriesPerDay, Predicate<Meal> filter) {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
                         Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)))
                 ;
         return meals.stream()
-                .filter(um -> DateTimeUtil.isBetween(um.getTime(),startTime,endTime))
+                .filter(filter)
                 .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) >caloriesPerDay))
                 .collect(Collectors.toList());
     }
@@ -59,7 +58,7 @@ public class MealsUtil {
 
         final List<MealTo> mealsTo = new ArrayList<>();
         meals.forEach(meal ->{
-                if(DateTimeUtil.isBetween(meal.getTime(), startTime,endTime)) {
+                if(Util.isBetweenInclusive(meal.getTime(), startTime,endTime)) {
                     mealsTo.add(createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay));
                 }
         });
@@ -78,7 +77,7 @@ public class MealsUtil {
         Meal meal = meals.pop();
         dailyCaloriesMap.merge(meal.getDate(),meal.getCalories(),Integer::sum);
         filterWithRecursion(meals,startTime,endTime,caloriesPerDay,dailyCaloriesMap,result);
-        if(DateTimeUtil.isBetween(meal.getTime(),startTime,endTime)){
+        if(Util.isBetweenInclusive(meal.getTime(),startTime,endTime)){
             result.add(createTo(meal, dailyCaloriesMap.get(meal.getDate())>caloriesPerDay));
         }
     }

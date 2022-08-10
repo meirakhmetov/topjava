@@ -42,9 +42,9 @@ public class MealServlet extends HttpServlet {
             Integer.parseInt(request.getParameter("calories")));
 
         LOG.info(meal.isNew() ? "Creat {}" : "Update{}", meal);
-        repository.save(meal);
+        repository.save(meal,SecurityUtil.authUserId());
         response.sendRedirect("meals");
-        //response.sendRedirect("meals?action=sortByDate");
+
     }
 
 
@@ -53,12 +53,12 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
         if(action==null){
             LOG.info("getAll");
-            request.setAttribute("meals",MealsUtil.getTos(repository.getAll(),MealsUtil.DEFAULT_CALORIES_PER_DAY));
+            request.setAttribute("meals",MealsUtil.getTos(repository.getAll(SecurityUtil.authUserId()),MealsUtil.DEFAULT_CALORIES_PER_DAY));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
         } else if(action.equals("delete")){
             int id = getId(request);
             LOG.info("DELETE {}",id);
-            repository.delete(id);
+            repository.delete(id,SecurityUtil.authUserId());
             response.sendRedirect("meals");
 
    /*     }else if(action.equals("sortByDate")){
@@ -73,7 +73,7 @@ public class MealServlet extends HttpServlet {
 
         }else if(action.equals("update")) {
             int id = getId(request);
-            final Meal meal = repository.get(id);
+            final Meal meal = repository.get(id,SecurityUtil.authUserId());
             request.setAttribute("meal", meal);
             request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
         }

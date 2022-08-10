@@ -1,49 +1,38 @@
 package kz.meiir.topjava.repository.inmemory;
 
+import org.springframework.stereotype.Repository;
 import kz.meiir.topjava.model.User;
 import kz.meiir.topjava.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Meiir Akhmetov on 09.08.2022
  */
 @Repository
-public class InMemoryUserRepository implements UserRepository {
-    private static final Logger Log = LoggerFactory.getLogger(InMemoryUserRepository.class);
+public class InMemoryUserRepository extends InMemoryBaseRepository<User> implements UserRepository {
+
+    static final int USER_ID=1;
+    static final int ADMIN_ID=2;
+
+
 
     @Override
-    public User save(User user) {
-        Log.info("save {}",user);
-        return user;
-    }
-
-    @Override
-    public boolean delete(int id) {
-        Log.info("delete {}", id);
-        return true;
-    }
-
-    @Override
-    public User get(int id) {
-        Log.info("get {}", id);
-        return null;
+    public List<User> getAll() {
+        return getCollection().stream()
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
+                .collect(Collectors.toList());
     }
 
     @Override
     public User getByEmail(String email) {
-        Log.info("getByEmail {}", email);
-        return null;
+        return getCollection().stream()
+                .filter(u->email.equals(u.getEmail()))
+                .findFirst()
+                .orElse(null);
 
     }
 
-    @Override
-    public List<User> getAll() {
-        Log.info("getAll");
-        return Collections.emptyList();
-    }
 }

@@ -1,4 +1,4 @@
-package kz.meiir.topjava.model;
+package kz.meiir.topjava.to;
 
 import java.time.LocalDateTime;
 
