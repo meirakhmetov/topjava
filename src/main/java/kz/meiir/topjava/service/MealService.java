@@ -21,7 +21,6 @@ public class MealService {
 
     private final MealRepository repository;
 
-
     public MealService(MealRepository repository) {
         this.repository = repository;
     }
@@ -29,9 +28,11 @@ public class MealService {
     public Meal get(int id, int userId){
         return checkNotFoundWithId(repository.get(id,userId),id);
     }
+
     public void delete(int id, int userId){
         checkNotFoundWithId(repository.delete(id,userId),id);
     }
+
     public List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId){
         return repository.getBetween(
                 DateTimeUtil.createDateTime(startDate,LocalDate.MIN, LocalTime.MIN),
@@ -45,6 +46,7 @@ public class MealService {
     public void update(Meal meal, int userId){
         checkNotFoundWithId(repository.save(meal,userId), meal.getId());
     }
+
     public Meal creat(Meal meal, int userId){
         return repository.save(meal,userId);
     }
