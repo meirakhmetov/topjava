@@ -14,19 +14,19 @@ import java.util.List;
  */
 @Repository
 public class InMemoryUserRepository implements UserRepository {
-    private static final Logger Log = LoggerFactory.getLogger(InMemoryUserRepository.class);
+
+    public static final int User_ID =1;
+    public static final int ADMIN_ID = 2;
+
 
     @Override
     public User save(User user) {
-        Log.info("save {}",user);
-        return user;
+       if (user.isNew()){
+           user.setId(counter.incrementAddGet());
+       }
     }
 
-    @Override
-    public boolean delete(int id) {
-        Log.info("delete {}", id);
-        return true;
-    }
+
 
     @Override
     public User get(int id) {
