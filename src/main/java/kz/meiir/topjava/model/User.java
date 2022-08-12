@@ -38,6 +38,10 @@ public class User extends AbstractNamedEntity{
         this.email = email;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Date getRegistered() {
         return registered;
     }

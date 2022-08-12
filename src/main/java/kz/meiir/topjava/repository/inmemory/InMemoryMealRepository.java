@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
@@ -30,7 +31,10 @@ public class InMemoryMealRepository implements MealRepository {
     {
         MealsUtil.MEALS.forEach(meal-> save(meal,USER_ID));
 
+        save(new Meal(LocalDateTime.of(2022, Month.JULY, 30, 14,0),"Обед Админа",510), ADMIN_ID);
+        save(new Meal(LocalDateTime.of(2022, Month.JULY, 30, 21,0),"Ужин Админа",1500), ADMIN_ID);
     }
+
     @Override
     public Meal save(Meal meal, int userId) {
         InMemoryBaseRepository<Meal> meals = useraMealsMap.computeIfAbsent(userId, uid -> new InMemoryBaseRepository<>());

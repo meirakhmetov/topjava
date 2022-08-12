@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset = UTF-8" language="java" %>
+<%@ page contentType="text/html;charset = UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://topjava.meiir.kz/functions" %>
@@ -8,12 +8,13 @@
     <title>Meals list</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+<body>
 <section>
     <h3><a href="index.html">Home</a> </h3>
     <hr/>
     <h2>Meals LIST</h2>
-    <from method="post" action="meals">
-
+    <from method="get" action="meals">
+        <input type="hidden" name="action" value="filter">
         <dl>
             <dt>From Date:</dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -48,7 +49,7 @@
         </thead>
         <c:forEach items="${meals}" var="meal">
             <jsp:useBean id="meal" scope="page" type="kz.meiir.topjava.to.MealTo"/>
-            <tr class="${meal.excess ? 'excess' : 'normal'}">
+            <tr data-mealExcess="${meal.excess}">
                 <td>${fn:formatDateTime(meal.dateTime)}</td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>

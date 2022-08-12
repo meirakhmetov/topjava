@@ -15,7 +15,7 @@ import static kz.meiir.topjava.util.ValidationUtil.checkNew;
 /**
  * @author Meiir Akhmetov on 08.08.2022
  */
-@Controller
+
 public class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
