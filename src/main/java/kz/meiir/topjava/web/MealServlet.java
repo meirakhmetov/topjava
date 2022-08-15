@@ -56,7 +56,7 @@ public class MealServlet extends HttpServlet {
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
 
-        if (StringUtils.isEmpty(request.getParameter("id"))){
+        if(StringUtils.isEmpty(request.getParameter("id"))){
             mealController.create(meal);
         }else{
             mealController.update(meal, getId(request));

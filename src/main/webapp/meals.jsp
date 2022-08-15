@@ -13,7 +13,7 @@
     <h3><a href="index.html">Home</a> </h3>
     <hr/>
     <h2>Meals LIST</h2>
-    <from method="get" action="meals">
+    <form method="get" action="meals">
         <input type="hidden" name="action" value="filter">
         <dl>
             <dt>From Date:</dt>
@@ -29,10 +29,12 @@
         </dl>
         <dl>
             <dt>To Time:</dt>
-            <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
+            <dd><input type="time"  name="endTime" value="${param.endTime}"></dd>
         </dl>
         <button type="submit">Filter</button>
-    </from>
+    </form>
+
+
     <hr/>
     <a href="meals?action=create">Add Meal</a>
     <br><br>

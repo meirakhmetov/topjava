@@ -34,6 +34,7 @@ public class SpringMain {
                             LocalDate.of(2022, Month.JULY,30), LocalTime.of(7,0),
                             LocalDate.of(2022,Month.JULY,31), LocalTime.of(11,0));
                 filteredMealsWithExcess.forEach(System.out::println);
+            System.out.println(filteredMealsWithExcess.get(1).getDateTime().toLocalTime());
         }
     }
 }
