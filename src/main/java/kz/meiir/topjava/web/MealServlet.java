@@ -31,14 +31,13 @@ import static kz.meiir.topjava.util.DateTimeUtil.parseLocalTime;
  */
 public class MealServlet extends HttpServlet {
 
-
     private ConfigurableApplicationContext spingContext;
     private MealRestController mealController;
 
     @Override
     public void init(ServletConfig config) throws ServletException{
         super.init(config);
-        spingContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        spingContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
         mealController = spingContext.getBean(MealRestController.class);
     }
 
