@@ -14,7 +14,7 @@
 
 
     <!--<context:annotation-config/>-->
-    <context:component-scan base-package="kz.meiir.topjava.repository"/>
+    <context:component-scan base-package="kz.meiir.topjava.repository.jdbc"/>
     <context:component-scan base-package="kz.meiir.topjava.service"/>
     <context:component-scan base-package="kz.meiir.topjava.web"/>
 
