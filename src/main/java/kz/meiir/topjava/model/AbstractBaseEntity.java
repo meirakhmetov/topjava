@@ -4,7 +4,12 @@ package kz.meiir.topjava.model;
  * @author Meiir Akhmetov on 08.08.2022
  */
 public class AbstractBaseEntity {
+    public static final int START_SEQ = 100000;
+
     protected Integer id;
+
+    public AbstractBaseEntity(){
+    }
 
     protected AbstractBaseEntity(Integer id){
         this.id = id;
@@ -25,5 +30,17 @@ public class AbstractBaseEntity {
     @Override
     public String toString() {
         return getClass().getSimpleName()+":"+id;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this==o){
+            return true;
+        }
+        if(o==null || getClass() != o.getClass()){
+            return false;
+        }
+        AbstractBaseEntity that = (AbstractBaseEntity) o;
+        return id!=null && id.equals(that.id);
     }
 }

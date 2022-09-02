@@ -5,7 +5,6 @@ import kz.meiir.topjava.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class AbstractUserController {
     public User create(User user){
         log.info("create {}", user);
         checkNew(user);
-        return service.creat(user);
+        return service.create(user);
     }
 
     public void delete(int id){

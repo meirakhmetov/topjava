@@ -3,9 +3,11 @@ package kz.meiir.topjava.model;
 /**
  * @author Meiir Akhmetov on 08.08.2022
  */
-public class AbstractNamedEntity extends AbstractBaseEntity{
+public abstract class AbstractNamedEntity extends AbstractBaseEntity{
 
     protected String name;
+
+    public AbstractNamedEntity(){}
 
     protected AbstractNamedEntity(Integer id, String name) {
         super(id);
