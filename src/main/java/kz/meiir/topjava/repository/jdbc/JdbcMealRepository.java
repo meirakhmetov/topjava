@@ -29,7 +29,7 @@ public class JdbcMealRepository implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAll(int UserId) {
+    public List<Meal> getAll(int UserId) {
         return null;
     }
 

@@ -8,13 +8,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static kz.meiir.topjava.model.AbstractBaseEntity.START_SEQ;
+
 /**
  * @author Meiir Akhmetov on 09.08.2022
  */
 @Repository
 public class InMemoryBaseRepository<T extends AbstractBaseEntity> {
 
-    private static AtomicInteger counter = new AtomicInteger(0);
+    private static AtomicInteger counter = new AtomicInteger(START_SEQ);
 
     Map<Integer,T> map = new ConcurrentHashMap<>();
 

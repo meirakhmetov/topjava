@@ -68,7 +68,7 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
+    public List<Meal> getAll(int userId) {
         return getAllFilteres(userId, m->true);
     }
 

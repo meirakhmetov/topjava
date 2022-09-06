@@ -43,4 +43,9 @@ public class AbstractBaseEntity {
         AbstractBaseEntity that = (AbstractBaseEntity) o;
         return id!=null && id.equals(that.id);
     }
+
+    @Override
+    public int hashCode(){
+        return id==null?0 : id;
+    }
 }
