@@ -18,11 +18,11 @@ public interface MealRepository {
     boolean delete(int id, int userId);
 
     //null if not found
-    Meal get(int id, int UserId);
+    Meal get(int id, int userId);
 
     //ORDERED dateTime desc
-    List<Meal> getAll(int UserId);
+    List<Meal> getAll(int userId);
 
     //ORDERED dateTime desc
-    List<Meal> getBetween(LocalDateTime startTime, LocalDateTime endTime, int userId);
+    List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
 }
